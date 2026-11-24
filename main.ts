@@ -29,7 +29,9 @@ function main(): void {
   }
   for (const [i, line] of lines.slice(0, 2).entries()) {
     // One sentence per line: exactly one sentence-ending period, at the end.
-    const periods = (line.match(/\./g) ?? []).length;
+    // Abbreviations like "a.m." / "p.m." carry periods that are not sentence ends.
+    const countable = line.replace(/\b[ap]\.m\./gi, "");
+    const periods = (countable.match(/\./g) ?? []).length;
     if (periods !== 1 || !line.endsWith(".")) {
       throw new Error(`line ${i + 1} is not exactly one sentence`);
     }
