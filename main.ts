@@ -28,8 +28,10 @@ function main(): void {
     throw new Error("entry is only white space");
   }
   for (const [i, line] of lines.slice(0, 2).entries()) {
-    if (!line.endsWith(".")) {
-      throw new Error(`line ${i + 1} is not a single sentence ending in a period`);
+    // One sentence per line: exactly one sentence-ending period, at the end.
+    const periods = (line.match(/\./g) ?? []).length;
+    if (periods !== 1 || !line.endsWith(".")) {
+      throw new Error(`line ${i + 1} is not exactly one sentence`);
     }
   }
   mkdirSync("/output", { recursive: true });
